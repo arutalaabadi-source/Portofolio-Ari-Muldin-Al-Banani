@@ -1,21 +1,63 @@
-document.addEventListener("DOMContentLoaded", () => {
+/* ================================
+   LOADER
+================================ */
 
-    /* =========================
-       SCROLL REVEAL
-    ========================= */
+window.addEventListener("load", () => {
 
-    const revealElements = document.querySelectorAll(".reveal");
+    const loader = document.getElementById("loader");
 
-    const observer = new IntersectionObserver(
+    setTimeout(() => {
+        loader.classList.add("hidden");
+    }, 700);
+
+});
+
+
+/* ================================
+   MOBILE MENU
+================================ */
+
+const menuBtn = document.getElementById("menuBtn");
+const navMenu = document.getElementById("navMenu");
+
+menuBtn.addEventListener("click", () => {
+
+    navMenu.classList.toggle("open");
+
+});
+
+
+/* CLOSE MOBILE MENU */
+
+document.querySelectorAll(".nav-link").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navMenu.classList.remove("open");
+
+    });
+
+});
+
+
+/* ================================
+   SCROLL REVEAL
+================================ */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+const revealObserver =
+    new IntersectionObserver(
         (entries) => {
 
-            entries.forEach((entry) => {
+            entries.forEach(entry => {
 
                 if (entry.isIntersecting) {
 
-                    entry.target.classList.add("active");
+                    entry.target.classList.add("show");
 
-                    observer.unobserve(entry.target);
+                    revealObserver.unobserve(entry.target);
 
                 }
 
@@ -23,67 +65,124 @@ document.addEventListener("DOMContentLoaded", () => {
 
         },
         {
-            threshold: 0.12
+            threshold: 0.15
         }
     );
 
 
-    revealElements.forEach((element) => {
-        observer.observe(element);
-    });
+revealElements.forEach(element => {
+
+    revealObserver.observe(element);
+
+});
 
 
-    /* =========================
-       MOBILE MENU
-    ========================= */
+/* ================================
+   ACTIVE NAVIGATION
+================================ */
 
-    const menuButton = document.querySelector(".menu-button");
-    const navLinks = document.querySelector(".nav-links");
+const sections =
+    document.querySelectorAll("section");
 
-    if (menuButton) {
-
-        menuButton.addEventListener("click", () => {
-
-            navLinks.classList.toggle("mobile-open");
-
-        });
-
-    }
+const navLinks =
+    document.querySelectorAll(".nav-link");
 
 
-    /* =========================
-       CLOSE MOBILE MENU
-    ========================= */
+window.addEventListener("scroll", () => {
 
-    document.querySelectorAll(".nav-links a").forEach((link) => {
+    let current = "";
 
-        link.addEventListener("click", () => {
+    sections.forEach(section => {
 
-            navLinks.classList.remove("mobile-open");
+        const sectionTop =
+            section.offsetTop - 150;
 
-        });
+        if (window.scrollY >= sectionTop) {
+
+            current = section.getAttribute("id");
+
+        }
 
     });
 
 
-    /* =========================
-       MOUSE PARALLAX PHOTO
-    ========================= */
+    navLinks.forEach(link => {
 
-    const photo = document.querySelector(".photo-card");
+        link.classList.remove("active");
 
-    if (photo && window.innerWidth > 900) {
+        if (
+            link.getAttribute("href") ===
+            "#" + current
+        ) {
 
-        document.addEventListener("mousemove", (event) => {
+            link.classList.add("active");
 
-            const x = (window.innerWidth / 2 - event.clientX) / 70;
-            const y = (window.innerHeight / 2 - event.clientY) / 70;
+        }
 
-            photo.style.transform =
-                `rotate(2deg) translate(${x}px, ${y}px)`;
+    });
 
-        });
+});
+
+
+/* ================================
+   NAVBAR SCROLL EFFECT
+================================ */
+
+const navbar =
+    document.querySelector(".navbar");
+
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 50) {
+
+        navbar.style.background =
+            "rgba(8, 11, 20, 0.92)";
+
+    } else {
+
+        navbar.style.background =
+            "rgba(8, 11, 20, 0.7)";
 
     }
+
+});
+
+
+/* ================================
+   MOUSE PARALLAX
+================================ */
+
+const heroImage =
+    document.querySelector(".hero-image");
+
+
+document.addEventListener("mousemove", (event) => {
+
+    if (window.innerWidth < 900) return;
+
+    const x =
+        (window.innerWidth / 2 - event.clientX) / 80;
+
+    const y =
+        (window.innerHeight / 2 - event.clientY) / 80;
+
+    heroImage.style.transform =
+        `translate(${x}px, ${y}px)`;
+
+});
+
+
+/* ================================
+   SMOOTH BUTTON EFFECT
+================================ */
+
+document.querySelectorAll(".btn").forEach(button => {
+
+    button.addEventListener("mouseenter", () => {
+
+        button.style.transition = "0.3s";
+
+    });
 
 });
